@@ -1,0 +1,11 @@
+# some suffix file
+*.dat
+*.txt
+*.exe
+*.o
+*.a
+
+# some directory
+.vscode/
+.idea/
+
