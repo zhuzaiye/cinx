@@ -30,8 +30,7 @@ int CandyCount(vector<int>& ratings) {
     return accumulate(num.begin(), num.end(), 0);
 }
 
-int main(int argc, char const *argv[])
-{
+int main(int argc, char const* argv[]) {
     vector<int> ratings = {1, 0, 2};
     int candyCnt = CandyCount(ratings);
     cout << "The minmum candy count: " << candyCnt << endl;
