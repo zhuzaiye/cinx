@@ -21,8 +21,7 @@ int eraseOverlapIntervals(vector<vector<int>>& intervals) {
         return 0;
     }
     int size = intervals.size();
-    sort(intervals.begin(), intervals.end(),
-         [](vector<int> a, vector<int> b) { return a[1] < b[1]; });
+    sort(intervals.begin(), intervals.end(), [](vector<int> a, vector<int> b) { return a[1] < b[1]; });
     int total, pre = intervals[0][1];
     for (unsigned int i = 1; i < size; ++i) {
         if (intervals[i][0] < pre) {

@@ -55,11 +55,8 @@ int CandyCount2(vector<int>& ratings) {
     }
 
     for (int i=0; i< len; ++i) {
-        if (ratings[i] > virtual_rate) {
-            num[i] = virtual_rate + 1;
-        }
         if (ratings[i] > ratings[i+1]) {
-            num[i] = num[i] -1;
+            num[i] = num[i] +1;
         }
     }
     // 从右往左, 如果左边大于右边, 左边=max(左边，右边)
@@ -73,10 +70,6 @@ int CandyCount2(vector<int>& ratings) {
 
     return accumulate(num.begin(), num.end(), 0);
 }
-
-
-
-
 
 int main(int argc, char const* argv[]) {
     vector<int> ratings = {2, 3, 0, 1, 6};
