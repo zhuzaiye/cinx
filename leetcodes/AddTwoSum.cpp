@@ -4,15 +4,10 @@
 #include <vector>
 // map
 #include <map>
+// 引入工具头文件
+#include "utils.h"
 
 using namespace std;
-
-void printVector(vector<int>& ratings) {
-    for (unsigned int i = 0; i<ratings.size(); ++i) {
-        cout << ratings[i] << " ";
-    }
-    cout << endl;
-}
 
 vector<int> twoSumAdd(vector<int>& nums, int target) {
     map<int, int> calcMap;
