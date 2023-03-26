@@ -22,12 +22,30 @@ vector<int> twoSumAdd(vector<int>& nums, int target) {
     return vector<int>{0, 0};
 }
 
+// 双指针
+vector<int> twoSumOrder(vector<int>& nums, int target) {
+    int left = 0, right = nums.size() - 1;
+    while (left < right) {
+        int currSum = nums[left] + nums[right];
+        if (currSum == target) {
+            return vector<int>{left + 1, right + 1};
+        }
+        if (currSum < target) {
+            ++left;
+        } else {
+            --right;
+        }
+    }
+    // defualt return 
+    return vector<int>{-1, -1};
+}
+
 int main(int argc, char const* argv[]) {
-    vector<int> nums = {2,7,11,15};
+    vector<int> nums = {2, 7, 11, 15};
     int target = 9;
 
-    vector<int>  rst = twoSumAdd(nums, target);
+    vector<int> rst = twoSumAdd(nums, target);
 
-    printVector(rst);
+    printNumVector(rst);
     return 0;
 }

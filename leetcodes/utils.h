@@ -3,6 +3,7 @@
 
 #include <vector>  // 数组
 
-void printVector(std::vector<int>& v);
+void printNumVector(std::vector<int>& nums);
+int binaryNumSearch(std::vector<int>& nums, int target);
 
 #endif
