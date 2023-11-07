@@ -72,16 +72,23 @@ public:
     cout << "compex copy" << endl;
   }
 
-  // 重载
-  friend Complex operator+(const Complex &c1, const Complex &c2);
+  // 操作符重载
+  friend Complex operator+(const Complex& c1, const Complex& c2);
+  Complex& operator+=(const Complex &c);
 };
 
 Complex operator+(const Complex &c1, const Complex &c2) {
-  Complex _c;
+  Complex _c; // 必须显式声明默认构造函数
   _c.real = c1.real + c2.real;
   _c.imag = c1.imag + c2.imag;
   return _c;
 }
+
+Complex& Complex::operator+=(const Complex &c) {
+  this->real += c.real;
+  this->imag += c.imag;
+  return *this;
+};
 
 // void func(Complex& c) {
 //   cout << "real: " << c.real << " imag: " << c.imag << endl;
@@ -98,6 +105,42 @@ Complex func2() {
   Complex c2 = c + c1;
   return c2;
 }
+
+Complex func3() {
+  Complex c(1.0, 2.0);
+  Complex c1(2.0, 3.0);
+  c += c1;
+  return c;
+}
+
+// 静态多态
+class Circle {
+public:
+  void Draw() const { cout << "Cicle draw" << endl; }
+};
+
+class Rectangle {
+public:
+  void Draw() const { cout << "Rectangle  draw" << endl; }
+};
+
+template <typename T> void test(const T &t) { t.Draw(); }
+
+// 动态多态
+class Geometry {
+public:
+  virtual void Draw() const = 0;
+};
+
+class CircleGeo : public Geometry {
+public:
+  void Draw() const { cout << "Geometry Cicle draw" << endl; }
+};
+
+class RectangleGeo : public Geometry {
+public:
+  void Draw() const { cout << "Geometry Rectangle  draw" << endl; }
+};
 
 int main() {
   // ---------
@@ -124,8 +167,23 @@ int main() {
   //   Complex c1(1.0, 2.0);
   //   func(c1);
 
-  Complex cc = func1();
-  cc.print();
+  //   Complex cc = func1();
+  //   cc.print();
+
+  //   func3().print();
+
+  Circle cir;
+  test(cir);
+
+  Rectangle rec;
+  test(rec);
+
+  CircleGeo cirg;
+  const Geometry *e1 = &cirg;
+  e1->Draw();
+  RectangleGeo recg;
+  const Geometry *e2 = &recg;
+  e2->Draw();
 
   return 0;
 }

@@ -9,3 +9,6 @@
 .vscode/
 .idea/
 
+# cmake-debug-dir
+cmake-build-debug
+
