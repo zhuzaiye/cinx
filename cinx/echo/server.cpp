@@ -7,10 +7,10 @@
 #include <fcntl.h>
 #include <cerrno>
 #include <vector>
-#include "util.h"
+#include "Socket.h"
 #include "Epoll.h"
 #include "InetAddress.h"
-#include "Socket.h"
+#include "Channel.h"
 
 #define MAX_EVENTS 1024
 #define READ_BUFFER 1024
@@ -48,12 +48,15 @@ int main() {
     serv_sock->listen();
 
     Epoll *ep = new Epoll();
-    serv_sock->set_nonblocking();
-    ep->add_fd(serv_sock->get_fd(), EPOLLIN | EPOLLET);
 
+    serv_sock->set_nonblocking();
+
+    /*
+    ep->add_fd(serv_sock->get_fd(), EPOLLIN | EPOLLET);
     while (true) {
-        std::vector<epoll_event> events = ep->poll();
-        int nfds = events.size();
+        //std::vector<epoll_event> events = ep->poll();
+        std::vector<Channel *> activeChannels  = ep->poll();
+        int nfds = activeChannels.size();
         for (int i = 0; i < nfds; ++i) {
             if (events[i].data.fd == serv_sock->get_fd()) {        //新客户端连接
                 InetAddress *client_addr = new InetAddress();      //会发生内存泄露！没有delete
@@ -65,6 +68,32 @@ int main() {
                 ep->add_fd(client_sock->get_fd(), EPOLLIN | EPOLLET);
             } else if (events[i].events & EPOLLIN) {      //可读事件
                 handleReadEvent(events[i].data.fd);
+            } else {         //其他事件，之后的版本实现
+                printf("something else happened\n");
+            }
+        }
+    }
+    */
+
+    Channel *serv_channel = new Channel(ep, serv_sock->get_fd());
+    serv_channel->enable_reading();
+
+    while (true) {
+        std::vector<Channel *> active_channels = ep->poll();
+        int nfds = active_channels.size();
+        for (int i = 0; i < nfds; ++i) {
+            int chfd = active_channels[i]->get_fd();
+            if (chfd == serv_sock->get_fd()) {                     //新客户端连接
+                InetAddress *client_addr = new InetAddress();      //会发生内存泄露！没有delete
+                Socket *client_sock = new Socket(serv_sock->accept(client_addr));       //会发生内存泄露！没有delete
+                printf("new client fd %d! IP: %s Port: %d\n", client_sock->get_fd(),
+                       inet_ntoa(client_addr->addr.sin_addr),
+                       ntohs(client_addr->addr.sin_port));
+                client_sock->set_nonblocking();
+                Channel *clnt_chan = new Channel(ep, client_sock->get_fd());
+                clnt_chan->enable_reading();
+            } else if (active_channels[i]->get_r_events() & EPOLLIN) {      //可读事件
+                handleReadEvent(active_channels[i]->get_fd());
             } else {         //其他事件，之后的版本实现
                 printf("something else happened\n");
             }

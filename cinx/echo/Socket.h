@@ -1,10 +1,10 @@
 // Copyright (c) 2023/11/6 by hzzhu92
 // Socket.h
 
-#include "InetAddress.h"
-
 #ifndef SOCKET_H
 #define SOCKET_H
+
+#include "InetAddress.h"
 
 class Socket {
 private:

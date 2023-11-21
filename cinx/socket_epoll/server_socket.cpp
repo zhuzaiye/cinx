@@ -3,10 +3,10 @@
 // 参考<<TCP/IP网络编程>> -- 韩圣雨
 // 采用TCP/IP协议(4层网络模型, 应用层-->传输层[TCP/UDP]-->网)
 
-#include <stdio.h>
+#include <cstdio>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include <string.h>
+#include <cstring>
 #include <unistd.h>
 #include "util.h"
 
@@ -36,7 +36,7 @@ int main() {
     int socket_fd = socket(AF_INET, SOCK_STREAM, 0);
     errif(socket_fd == -1, "socket create error");
 
-    struct sockaddr_in serv_addr;
+    struct sockaddr_in serv_addr;  // 地址初始化 ip:port
     bzero(&serv_addr, sizeof(serv_addr));  // 初始化serve_addr所有成员
     serv_addr.sin_family = AF_INET;  // 指定网络地址协议 IPV4 AF_INET6:IPV6
     serv_addr.sin_addr.s_addr = inet_addr("127.0.0.1");  // 基于字符串的地址给定 inet_addr转换字符串为sockaddr_in的s_addr的32位整数类型并检测无效IP地址
