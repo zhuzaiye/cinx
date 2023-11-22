@@ -11,4 +11,5 @@
 
 # cmake-debug-dir
 cmake-build-debug
+!CMakeLists.txt
 
